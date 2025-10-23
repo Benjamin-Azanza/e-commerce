@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Cap & Knit | Tienda Minimalista</title>
+
+    <style>
+        /* Reset */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { height: 100%; }
+
+        /* Base (De 0px a 800px): ROSADO LILA SUAVE */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #FCEEF0;
+            color: #111;
+            line-height: 1.6;
+            transition: background-color .25s ease;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1300px;
+            margin: 0 auto;
+            min-height: 100vh;
+            background-color: #FFFFFF;
+            transition: background-color .25s ease;
+        }
+
+        /* Estructura */
+        .header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 30px; border-bottom: 1px solid #EEE;
+            position: sticky; top: 0; z-index: 100;
+            background-color: #FFFFFF;
+            transition: background-color .25s ease, border-color .25s ease;
+        }
+        .brand-logo { font-size: 1.8em; font-weight: bold; letter-spacing: 2px; color: #111; text-transform: uppercase; text-decoration: none; }
+        .nav-right { display: flex; gap: 30px; font-size: .85em; text-transform: uppercase; }
+        .nav-right a, .cart-button { text-decoration: none; color: #111; padding: 5px 0; cursor: pointer; border: none; background: none; }
+        .nav-right a:hover, .cart-button:hover { color: #778899; }
+
+        .hero-section {
+            display: flex; justify-content: center; align-items: center;
+            height: 60vh; background-color: #F8F8F8; margin-bottom: 50px; position: relative;
+            transition: background-color .25s ease;
+        }
+        .hero-text { font-size: 3em; letter-spacing: 5px; font-weight: 300; text-transform: uppercase; }
+
+        .promo-section { padding: 40px 30px; }
+        .promo-title { margin-bottom: 40px; font-size: 1.8em; font-weight: 400; text-align: center; }
+
+        .promo-grid { display: flex; flex-wrap: wrap; gap: 20px; }
+        .promo-card {
+            position: relative; flex: 1 1 100%; min-height: 400px;
+            background-color: #E0E0E0; display: flex; flex-direction: column; justify-content: flex-end; padding: 30px;
+        }
+        @media (min-width: 781px) { .promo-card { flex: 1 1 0; } }
+        .promo-card h3 { color: #fff; font-size: 1.5em; margin-bottom: 15px; position: relative; z-index: 5; text-shadow: 0 0 5px rgba(0,0,0,.7); }
+        .promo-card button { background: #fff; border: 1px solid #111; padding: 10px 25px; cursor: pointer; width: 150px; font-size: .9em; text-transform: uppercase; position: relative; z-index: 5; }
+
+        .product-grid-section { padding: 40px 30px 80px; }
+        .section-title { text-align: center; margin-bottom: 60px; font-size: 2em; font-weight: 300; text-transform: uppercase; letter-spacing: 2px; }
+        .product-grid { display: flex; flex-wrap: wrap; gap: 25px; justify-content: center; }
+        .product-card { width: 100%; max-width: 300px; text-align: left; margin-bottom: 20px; cursor: pointer; }
+        .image-placeholder { height: 400px; background-color: #E0E0E0; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; font-size: .9em; color: #555; }
+        .product-card h3 { font-size: 1.1em; font-weight: 400; margin-bottom: 5px; }
+        .product-card .price { font-size: 1em; color: #555; }
+
+        .footer {
+            background-color: #FFFFFF; padding: 60px 30px; border-top: 1px solid #EEE;
+            transition: background-color .25s ease, border-color .25s ease;
+        }
+        .footer-content { display: flex; flex-wrap: wrap; justify-content: space-between; max-width: 900px; margin: 0 auto; gap: 40px; }
+        .footer-section { flex-basis: 100%; margin-bottom: 30px; }
+        @media (min-width: 781px) { .footer-section { flex-basis: auto; } }
+        .footer-section h4 { font-size: 1em; font-weight: bold; margin-bottom: 20px; text-transform: uppercase; }
+        .footer-section ul { list-style: none; }
+        .footer-section ul li a { text-decoration: none; color: #555; line-height: 2; font-size: .9em; }
+        .copyright { text-align: center; margin-top: 50px; padding-top: 20px; border-top: 1px solid #EEE; color: #777; font-size: .8em; }
+
+        /* Columnas en desktop */
+        @media (min-width: 1025px) { .product-grid { justify-content: space-between; } .product-card { width: calc(25% - 20px); } }
+        @media (min-width: 801px) and (max-width: 1024px) { .product-grid { justify-content: center; } .product-card { width: calc(33.33% - 25px); } }
+
+        /* ESTILOS POR PUNTOS DE QUIEBRE */
+        /* De 801px a 1024px: LILA PASTEL */
+        @media screen and (min-width: 801px) {
+            body { background: #F3E5F5; }
+        }
+
+        /* A PARTIR DE 1025px: CELESTE PASTEL */
+        @media screen and (min-width: 1025px) {
+            body { background: #E6F3FF; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header class="header">
+        <a href="index.html" class="brand-logo">CAP & KNIT</a>
+        <nav class="nav-right">
+            <a href="#productos">PRODUCTOS</a>
+            <a href="login.html" target="_blank">INICIAR SESIÓN</a>
+            <a href="carrito.html" class="cart-button" target="_blank">CESTA (0)</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero-section">
+            <h2 class="hero-text">LA CALIDEZ SE ENCUENTRA CON EL ESTILO</h2>
+        </section>
+
+        <section class="promo-section">
+            <h2 class="promo-title">NUESTROS DESTACADOS</h2>
+            <div class="promo-grid">
+                <div class="promo-card" style="background-color:#778899; min-height:400px;">
+                    <h3>COLECCIÓN MASCULINA</h3>
+                    <button onclick="window.location.href='#productos';">Ver más</button>
+                </div>
+                <div class="promo-card" style="background-color:#B3E0FF; min-height:400px;">
+                    <h3>PARA MUJER</h3>
+                    <button onclick="window.location.href='#productos';">Ver más</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="product-grid-section">
+            <h2 id="productos" class="section-title">Gorras y Gorros de Lana</h2>
+            <div class="product-grid">
+                <article class="product-card" onclick="window.open('detalle.html?id=gorra-celeste','_blank');">
+                    <div class="image-placeholder">Gorra Celeste Pastel</div>
+                    <h3>Gorra Algodón</h3>
+                    <span class="price">$19.99</span>
+                </article>
+                <article class="product-card" onclick="window.open('detalle.html?id=gorro-gris','_blank');">
+                    <div class="image-placeholder">Gorro Lana Gris Perla</div>
+                    <h3>Gorro Alpaca</h3>
+                    <span class="price">$29.99</span>
+                </article>
+                <article class="product-card" onclick="window.open('detalle.html?id=gorra-blanca','_blank');">
+                    <div class="image-placeholder">Gorra Blanca Pura</div>
+                    <h3>Gorra Minimal</h3>
+                    <span class="price">$22.50</span>
+                </article>
+                <article class="product-card" onclick="window.open('detalle.html?id=gorro-lila','_blank');">
+                    <div class="image-placeholder">Gorro Pompón Lila</div>
+                    <h3>Gorro Pompón</h3>
+                    <span class="price">$35.00</span>
+                </article>
+                <article class="product-card" onclick="window.open('detalle.html?id=gorra-beige','_blank');">
+                    <div class="image-placeholder">Gorra Beige Suave</div>
+                    <h3>Gorra Canvas</h3>
+                    <span class="price">$21.00</span>
+                </article>
+                <article class="product-card" onclick="window.open('detalle.html?id=gorro-rosa','_blank');">
+                    <div class="image-placeholder">Gorro Lana Rosa Pálido</div>
+                    <h3>Gorro Rib</h3>
+                    <span class="price">$27.50</span>
+                </article>
+                <article class="product-card" onclick="window.open('detalle.html?id=gorra-oscura','_blank');">
+                    <div class="image-placeholder">Gorra Azul Marino Sutil</div>
+                    <h3>Gorra Oscura</h3>
+                    <span class="price">$20.50</span>
+                </article>
+                <article class="product-card" onclick="window.open('detalle.html?id=gorro-blanco','_blank');">
+                    <div class="image-placeholder">Gorro Lana Blanco</div>
+                    <h3>Gorro Básico</h3>
+                    <span class="price">$25.00</span>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Síguenos en</h4>
+                <ul>
+                    <li><a href="#">Instagram</a></li>
+                    <li><a href="#">Facebook</a></li>
+                    <li><a href="#">TikTok</a></li>
+                    <li><a href="#">YouTube</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Acerca de Cap & Knit</h4>
+                <ul>
+                    <li><a href="#">Aviso de Privacidad</a></li>
+                    <li><a href="#">Términos y Condiciones</a></li>
+                    <li><a href="#">Nuestras Tiendas</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Información Adicional</h4>
+                <ul>
+                    <li><a href="login.html" target="_blank">Registro</a></li>
+                    <li><a href="#">Política de datos</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2025 CAP & KNIT. E-COMMERCE MINIMALISTA.</p>
+        </div>
+    </footer>
+</div>
+</body>
+</html>
+
+
+
+
+
+carrito.html
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cesta de Compras | Cap & Knit</title>
+    <style>
+        /* COPIA EL CSS DEL INDEX.HTML AQUÍ */
+
+        /* Estilos específicos para esta página */
+        .cart-layout {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            padding: 40px 30px;
+        }
+
+        .cart-items {
+            flex: 2;
+        }
+
+        .cart-summary {
+            flex: 1;
+            padding: 30px;
+            border: 1px solid #E0E0E0;
+            border-radius: 8px;
+            background-color: #F8F8F8;
+        }
+
+        .empty-cart-message {
+            text-align: center;
+            padding: 50px;
+            font-size: 1.2em;
+            color: #777;
+        }
+
+        .checkout-button {
+            background-color: #E6F3FF;
+            color: #111;
+            padding: 15px;
+            cursor: pointer;
+            border: none;
+            width: 100%;
+            text-transform: uppercase;
+            font-size: 1.1em;
+            margin-top: 20px;
+        }
+
+        @media screen and (min-width: 781px) {
+            .cart-layout {
+                flex-direction: row;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header class="header">
+        <a href="index.html" class="brand-logo">CAP & KNIT</a>
+        <nav class="nav-right">
+            <a href="index.html#productos">PRODUCTOS</a>
+            <a href="login.html" target="_blank">INICIAR SESIÓN</a>
+            <a href="carrito.html" class="cart-button">CESTA (0)</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="cart-layout">
+            <div class="cart-items">
+                <h2 style="margin-bottom: 30px; font-weight: 300;">TU CESTA</h2>
+
+                <div class="empty-cart-message">
+                    Tu cesta está vacía. ¡Descubre nuestros productos!
+                </div>
+            </div>
+
+            <div class="cart-summary">
+                <h3>RESUMEN</h3>
+                <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+                    <span>Subtotal:</span>
+                    <span>$0.00</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding-top: 15px; border-top: 1px solid #ccc; margin-top: 15px;">
+                    <span style="font-size: 1.2em; font-weight: bold;">TOTAL:</span>
+                    <span style="font-size: 1.2em; font-weight: bold;">$0.00</span>
+                </div>
+
+                <button class="checkout-button" disabled style="background-color: #ccc;">PROCEDER AL PAGO</button>
+                <p style="text-align: center; margin-top: 10px; font-size: 0.8em; color: #777;">*Necesitas productos para pagar</p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p class="copyright">&copy; 2025 CAP & KNIT.</p>
+    </footer>
+</div>
+</body>
+</html>
+
+
+
+detalle.html
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle de Producto | Cap & Knit</title>
+    <style>
+        /* COPIA EL CSS DEL INDEX.HTML AQUÍ */
+
+        /* Estilos específicos para esta página (ya incluidos en el código anterior, ¡pero necesarios!) */
+        .detail-content {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            padding: 40px 30px;
+        }
+        .main-image {
+            flex: 1 1 50%;
+            height: 600px;
+            background-color: #E0E0E0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .product-info {
+            flex: 1 1 300px;
+        }
+        .price-large {
+            font-size: 2.5em;
+            color: #111;
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+        .add-to-cart-button {
+            background-color: #F3E5F5;
+            color: #111;
+            padding: 15px 30px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            text-transform: uppercase;
+            font-size: 1.1em;
+            margin-top: 20px;
+        }
+        @media screen and (min-width: 781px) {
+            .detail-content {
+                flex-direction: row;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header class="header">
+        <a href="index.html" class="brand-logo">CAP & KNIT</a>
+        <nav class="nav-right">
+            <a href="index.html#productos">PRODUCTOS</a>
+            <a href="login.html" target="_blank">INICIAR SESIÓN</a>
+            <a href="carrito.html" class="cart-button" target="_blank">CESTA (0)</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="detail-content">
+            <div class="main-image">
+                Imagen de Producto: Gorra Clásica Celeste
+            </div>
+
+            <div class="product-info">
+                <h1 style="font-weight: 400; font-size: 2em; margin-bottom: 10px;">Gorra Clásica - Edición Pastel</h1>
+                <p class="price-large">$19.99</p>
+
+                <p style="margin-bottom: 15px;">**Descripción:** Algodón peinado ultra-suave. Perfecta para un look minimalista y relajado. Tono Celeste Pastel.</p>
+
+                <div style="margin-bottom: 25px;">
+                    <label for="talla" style="font-weight: bold;">Talla:</label>
+                    <select id="talla" style="padding: 8px; border: 1px solid #ccc;">
+                        <option>S/M</option>
+                        <option>L/XL</option>
+                    </select>
+                </div>
+
+                <button class="add-to-cart-button" onclick="window.location.href='carrito.html';">AÑADIR A LA CESTA</button>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="copyright"><p>&copy; 2025 CAP & KNIT.</p></div>
+    </footer>
+</div>
+</body>
+</html>
+
+
+login.html
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión | Cap & Knit</title>
+    <style>
+        /* COPIA EL CSS DEL INDEX.HTML AQUÍ */
+
+        /* Estilos específicos para esta página */
+        .form-container {
+            max-width: 400px;
+            margin: 80px auto;
+            padding: 40px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .form-container input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .form-container button {
+            background-color: #E6F3FF;
+            color: #111;
+            padding: 12px 20px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header class="header">
+        <a href="index.html" class="brand-logo">CAP & KNIT</a>
+        <nav class="nav-right">
+            <a href="index.html#productos">PRODUCTOS</a>
+            <a href="login.html">INICIAR SESIÓN</a>
+            <a href="carrito.html" class="cart-button" target="_blank">CESTA (0)</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="form-container">
+            <h2 style="margin-bottom: 30px; font-weight: 300;">INICIAR SESIÓN</h2>
+            <form>
+                <input type="email" placeholder="Correo Electrónico" required>
+                <input type="password" placeholder="Contraseña" required>
+                <button type="submit">ACCEDER</button>
+            </form>
+            <p style="margin-top: 20px;"><a href="#" style="color: #778899;">¿Olvidaste tu contraseña?</a></p>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p class="copyright">&copy; 2025 CAP & KNIT.</p>
+    </footer>
+</div>
+</body>
+</html>
+
