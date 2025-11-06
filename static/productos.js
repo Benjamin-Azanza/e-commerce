@@ -1,14 +1,14 @@
 // static/productos.js
 
-// === LISTA DE PRODUCTOS ===
+//Lista de productos
 const productos = [
-    { id: 1, nombre: "Gorra Algodón", precio: 19.99, imagen: "Gorra Celeste Pastel", descripcion: "Algodón peinado ultra-suave. Perfecta para un look minimalista." },
+    { id: 1, nombre: "Gorra Algodón", precio: 19.99, imagen: "Gorra Celeste", descripcion: "Algodón peinado ultra-suave. Perfecta para un look minimalista." },
     { id: 2, nombre: "Gorro Alpaca", precio: 29.99, imagen: "Gorro Lana Gris", descripcion: "Lana 100% natural de alpaca. Suave y cálido." },
     { id: 3, nombre: "Gorra Negra", precio: 22.50, imagen: "Gorra Negra Minimal", descripcion: "Diseño minimalista en algodón negro." },
     { id: 4, nombre: "Gorro Beige", precio: 25.00, imagen: "Gorro Beige Suave", descripcion: "Suave gorro beige para los días fríos." }
 ];
 
-// === FUNCIONES GENERALES ===
+//Funciones generales
 function obtenerCarrito() {
     return JSON.parse(localStorage.getItem('cart') || '[]');
 }
@@ -24,9 +24,9 @@ function actualizarContador() {
     if (contador) contador.textContent = total;
 }
 
-// === INDEX.HTML ===
+//Index.html
 function mostrarProductos() {
-    if (!window.location.pathname.includes('index.html')) return;
+    if (!window.location.pathname.includes('productos.html')) return;
     const grid = document.getElementById('product-grid');
     if (!grid) return;
     grid.innerHTML = '';
@@ -47,7 +47,7 @@ function mostrarProductos() {
     });
 }
 
-// === DETALLE.HTML ===
+//detalle.html
 function mostrarDetalle() {
     if (!window.location.pathname.includes('detalle.html')) return;
 
@@ -100,7 +100,7 @@ function mostrarDetalle() {
     });
 }
 
-// === CARRITO.HTML ===
+//carrito.html
 function mostrarCarrito() {
     if (!window.location.pathname.includes('carrito.html')) return;
 
@@ -172,7 +172,6 @@ function eliminarDelCarrito(id) {
     actualizarContador();
 }
 
-// === AL CARGAR PÁGINA ===
 document.addEventListener('DOMContentLoaded', () => {
     mostrarProductos();   // index.html
     mostrarDetalle();     // detalle.html
