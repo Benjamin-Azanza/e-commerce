@@ -35,15 +35,15 @@
                 <form id="contactForm">
                     <div class="mb-3">
                         <label for="nombre" class="form-label">Nombre completo</label>
-                        <input type="text" id="nombre" class="form-control" required>
+                        <input type="text" id="nombre" class="form-control" >
                     </div>
                     <div class="mb-3">
                         <label for="email" class="form-label">Correo electrónico</label>
-                        <input type="email" id="email" class="form-control" required>
+                        <input type="email" id="email" class="form-control" >
                     </div>
                     <div class="mb-3">
                         <label for="asunto" class="form-label">Asunto</label>
-                        <input type="text" id="asunto" class="form-control" required>
+                        <input type="text" id="asunto" class="form-control" >
                     </div>
                     <div class="mb-3">
                         <label for="mensaje" class="form-label">Mensaje</label>
@@ -54,7 +54,7 @@
 
                 <div class="mensaje loading">Enviando mensaje...</div>
                 <div class="mensaje success">¡Mensaje enviado con éxito! Te contactaremos pronto.</div>
-                <div class="mensaje error">Error: No se pudo enviar el mensaje. Intenta nuevamente.</div>
+                <div class="mensaje error text-center fw-bold">Error: No se pudo enviar el mensaje. Intenta nuevamente.</div>
 
                 <div class="text-center mt-3">
                     <small class="text-muted">También puedes escribirnos a: <a href="mailto:info@capknit.com" class="text-decoration-none">info@capknit.com</a></small>
@@ -89,33 +89,10 @@
     </div>
 </footer>
 
-<script>
-    const form = document.getElementById('contactForm');
-    const loadingMsg = document.querySelector('.loading');
-    const successMsg = document.querySelector('.success');
-    const errorMsg = document.querySelector('.error');
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" 
+integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        loadingMsg.style.display = 'block';
-        successMsg.style.display = 'none';
-        errorMsg.style.display = 'none';
-
-        // Simular envío del formulario
-        setTimeout(() => {
-            loadingMsg.style.display = 'none';
-            successMsg.style.display = 'block';
-
-            // Limpiar el formulario después del éxito
-            form.reset();
-
-            // Ocultar el mensaje de éxito después de 5 segundos
-            setTimeout(() => {
-                successMsg.style.display = 'none';
-            }, 5000);
-        }, 1500);
-    });
-</script>
+<script src="/static/productos.js"></script>
 
 </body>
 </html>
