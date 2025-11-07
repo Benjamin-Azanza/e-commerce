@@ -186,38 +186,56 @@ $(function() {
     });
 
     
+    // Listener para el formulario de contacto
     const $contactForm = $('#contactForm');
-    
-    // Usamos el mismo truco: si el formulario existe en esta página...
     if ($contactForm.length > 0) {
-        // Seleccionamos los mensajes
         const $loadingMsg = $('.mensaje.loading');
         const $successMsg = $('.mensaje.success');
         const $errorMsg = $('.mensaje.error');
 
-        // Manejamos el evento 'submit' con jQuery
         $contactForm.on('submit', function(e) {
-            e.preventDefault(); // Evita que la página se recargue
-
-            // Ocultamos mensajes y mostramos 'cargando'
+            e.preventDefault(); 
+            
+            // 1. Ocultar todos los mensajes al inicio
+            $loadingMsg.hide();
             $successMsg.hide();
             $errorMsg.hide();
-            $loadingMsg.show(); // .show() es el .css('display', 'block') de jQuery
 
-            // Simulación de envío
+            // 2. Obtener valores y quitar espacios en blanco
+            const nombre = $('#nombre').val().trim();
+            const email = $('#email').val().trim();
+            const asunto = $('#asunto').val().trim();
+            const mensaje = $('#mensaje').val().trim();
+
+            // 3. VALIDACIÓN DE ERROR DEL CLIENTE (Campos vacíos)
+            if (nombre === '' || email === '' || asunto === '' || mensaje === '') {
+                // Si CUALQUIER campo está vacío, mostramos error
+                $errorMsg.text('Error: Por favor, complete todos los campos.'); // Mensaje específico
+                $errorMsg.show();
+                return; // Detenemos la función aquí
+            }
+
+            // 4. SI LA VALIDACIÓN PASA, MOSTRAMOS "CARGANDO"
+            $loadingMsg.show(); 
+
+            // 5. SIMULACIÓN DE ENVÍO (Error del Servidor)
             setTimeout(() => {
-                $loadingMsg.hide();     // .hide() es el .css('display', 'none')
-                $successMsg.show();
+                $loadingMsg.hide();
+                
+                // Usamos la simulación de error de servidor que ya teníamos
+                if (asunto.toLowerCase() === 'error') {
+                    $errorMsg.text('Error: No se pudo enviar el mensaje. Intenta nuevamente.'); // Mensaje de servidor
+                    $errorMsg.show();
+                } else {
+                    // ÉXITO TOTAL
+                    $successMsg.show();
+                    $(this)[0].reset(); 
 
-                // .reset() es una función nativa de formulario
-                // $(this)[0] se refiere al elemento DOM del formulario
-                $(this)[0].reset(); 
-
-                // Ocultar el mensaje de éxito después de 5 seg
-                setTimeout(() => {
-                    $successMsg.hide();
-                }, 5000);
-            }, 1500);
+                    setTimeout(() => {
+                        $successMsg.hide();
+                    }, 5000);
+                }
+            }, 2000);
         });
     }
 
