@@ -1,6 +1,3 @@
-// static/productos.js
-
-//Lista de productos
 const productos = [
     { id: 1, nombre: "Gorra Algodón", precio: 19.99, imagen: "Gorra Celeste", descripcion: "Algodón peinado ultra-suave. Perfecta para un look minimalista." },
     { id: 2, nombre: "Gorro Alpaca", precio: 29.99, imagen: "Gorro Lana Gris", descripcion: "Lana 100% natural de alpaca. Suave y cálido." },
@@ -8,7 +5,6 @@ const productos = [
     { id: 4, nombre: "Gorro Beige", precio: 25.00, imagen: "Gorro Beige Suave", descripcion: "Suave gorro beige para los días fríos." }
 ];
 
-//Funciones generales
 function obtenerCarrito() {
     return JSON.parse(localStorage.getItem('cart') || '[]');
 }
@@ -20,50 +16,48 @@ function guardarCarrito(cart) {
 function actualizarContador() {
     const cart = obtenerCarrito();
     const total = cart.reduce((sum, item) => sum + item.cantidad, 0);
-    const contador = document.getElementById('cart-count');
-    if (contador) contador.textContent = total;
+    const $contador = $('#cart-count');
+    if ($contador.length > 0) $contador.text(total);
 }
 
-//Index.html
 function mostrarProductos() {
     if (!window.location.pathname.includes('productos.html')) return;
-    const grid = document.getElementById('product-grid');
-    if (!grid) return;
-    grid.innerHTML = '';
+
+    const $grid = $('#product-grid');
+    if ($grid.length === 0) return;
+    $grid.empty();
 
     productos.forEach(p => {
-        const div = document.createElement('div');
-        div.className = 'col-10 col-md-4 col-lg-3';
-        div.innerHTML = `
-            <div class="card h-100 shadow-sm" style="cursor:pointer;">
-                <div class="card-body text-center" onclick="window.location.href='detalle.html?id=${p.id}'">
-                    <div class="bg-secondary-subtle py-5 mb-3 rounded">${p.imagen}</div>
-                    <h5 class="fw-normal">${p.nombre}</h5>
-                    <p class="text-muted mb-0">$${p.precio.toFixed(2)}</p>
+        const $div = $('<div></div>')
+            .addClass('col-10 col-md-4 col-lg-3')
+            .html(`
+                <div class="card h-100 shadow-sm" style="cursor:pointer;">
+                    <div class="card-body text-center producto-clickable" data-id="${p.id}">
+                        <div class="bg-secondary-subtle py-5 mb-3 rounded">${p.imagen}</div>
+                        <h5 class="fw-normal">${p.nombre}</h5>
+                        <p class="text-muted mb-0">$${p.precio.toFixed(2)}</p>
+                    </div>
                 </div>
-            </div>
-        `;
-        grid.appendChild(div);
+            `);
+        $grid.append($div);
     });
 }
 
-//detalle.html
 function mostrarDetalle() {
     if (!window.location.pathname.includes('detalle.html')) return;
-
+    
     const params = new URLSearchParams(window.location.search);
     const id = parseInt(params.get('id')) || 1;
     const producto = productos.find(p => p.id === id);
-
-    const contenedor = document.getElementById('detalle-producto');
-    if (!contenedor) return;
+    const $contenedor = $('#detalle-producto');
+    if ($contenedor.length === 0) return;
 
     if (!producto) {
-        contenedor.innerHTML = "<h2 class='text-center mt-5'>Producto no encontrado</h2>";
+        $contenedor.html("<h2 class='text-center mt-5'>Producto no encontrado</h2>");
         return;
     }
 
-    contenedor.innerHTML = `
+    $contenedor.html(`
         <div class="col-12 col-md-6">
             <div class="d-flex justify-content-center align-items-center bg-light" style="height:400px;">
                 <span class="text-muted">${producto.imagen}</span>
@@ -79,91 +73,84 @@ function mostrarDetalle() {
             </div>
             <button class="btn btn-primary w-100" id="btn-agregar">Añadir a la cesta</button>
         </div>
-    `;
+    `);
 
-    document.getElementById('btn-agregar').addEventListener('click', () => {
-        const cantidad = parseInt(document.getElementById('cantidad').value);
+    $('#btn-agregar').on('click', () => {
+        const cantidad = parseInt($('#cantidad').val());
         if (cantidad < 1 || cantidad > 10) {
             alert('Por favor selecciona una cantidad entre 1 y 10');
             return;
         }
-
         let cart = obtenerCarrito();
         const i = cart.findIndex(item => item.id === producto.id);
-
         if (i >= 0) cart[i].cantidad += cantidad;
         else cart.push({ ...producto, cantidad });
-
         guardarCarrito(cart);
         actualizarContador();
         alert(`Añadido al carrito: ${producto.nombre} (x${cantidad})`);
     });
 }
 
-//carrito.html
 function mostrarCarrito() {
     if (!window.location.pathname.includes('carrito.html')) return;
 
     const carrito = obtenerCarrito();
-    const contenedor = document.getElementById('cart-items');
-    const totalElem = document.getElementById('cart-total');
-    const btnCheckout = document.getElementById('checkout-btn');
-
-    if (!contenedor || !totalElem || !btnCheckout) return;
+    const $contenedor = $('#cart-items');
+    const $totalElem = $('#cart-total');
+    const $btnCheckout = $('#checkout-btn');
+    if ($contenedor.length === 0) return;
 
     if (carrito.length === 0) {
-        contenedor.innerHTML = "<p class='text-center mt-4 text-muted'>Tu cesta está vacía 🛒</p>";
-        totalElem.textContent = "$0.00";
-        btnCheckout.disabled = true;
+        $contenedor.html("<p class='text-center mt-4 text-muted'>Tu cesta está vacía 🛒</p>");
+        $totalElem.text("$0.00");
+        $btnCheckout.prop('disabled', true);
         return;
     }
 
     let total = 0;
-    contenedor.innerHTML = "";
+    $contenedor.empty();
 
     carrito.forEach(p => {
         const subtotal = p.precio * p.cantidad;
         total += subtotal;
 
-        const div = document.createElement('div');
-        div.className = "list-group-item d-flex justify-content-between align-items-center";
-        div.innerHTML = `
-            <div>
-                <h5>${p.nombre}</h5>
-                <small class="text-muted">$${p.precio.toFixed(2)} c/u</small>
-                <div class="mt-2">
-                    <button class="btn btn-outline-secondary btn-sm" onclick="cambiarCantidad(${p.id}, -1)">-</button>
-                    <span class="mx-2">${p.cantidad}</span>
-                    <button class="btn btn-outline-secondary btn-sm" onclick="cambiarCantidad(${p.id}, 1)">+</button>
+        const $div = $('<div></div>')
+            .addClass("list-group-item d-flex justify-content-between align-items-center")
+            .html(`
+                <div>
+                    <h5>${p.nombre}</h5>
+                    <small class="text-muted">$${p.precio.toFixed(2)} c/u</small>
+                    <div class="mt-2">
+                        <button class="btn btn-outline-secondary btn-sm btn-restar" data-id="${p.id}">-</button>
+                        <span class="mx-2">${p.cantidad}</span>
+                        <button class="btn btn-outline-secondary btn-sm btn-sumar" data-id="${p.id}">+</button>
+                    </div>
                 </div>
-            </div>
-            <div>
-                <span class="fw-bold">$${subtotal.toFixed(2)}</span>
-                <button class="btn btn-outline-danger btn-sm" onclick="eliminarDelCarrito(${p.id})">×</button>
-            </div>
-        `;
-        contenedor.appendChild(div);
+                <div>
+                    <span class="fw-bold">$${subtotal.toFixed(2)}</span>
+                    <button class="btn btn-outline-danger btn-sm btn-eliminar" data-id="${p.id}">×</button>
+                </div>
+            `);
+        $contenedor.append($div);
     });
 
-    totalElem.textContent = `$${total.toFixed(2)}`;
-    btnCheckout.disabled = false;
+    $totalElem.text(`$${total.toFixed(2)}`);
+    $btnCheckout.prop('disabled', false);
 }
 
-// Cambiar cantidad en carrito
 function cambiarCantidad(id, cambio) {
     let cart = obtenerCarrito();
     const i = cart.findIndex(p => p.id === id);
     if (i === -1) return;
-
+    
     cart[i].cantidad += cambio;
-    if (cart[i].cantidad <= 0) cart.splice(i, 1);
-
+    if (cart[i].cantidad <= 0) cart = cart.filter(p => p.id !== id);
+    
     guardarCarrito(cart);
     mostrarCarrito();
     actualizarContador();
 }
 
-// Eliminar item del carrito
 function eliminarDelCarrito(id) {
     let cart = obtenerCarrito();
     cart = cart.filter(p => p.id !== id);
@@ -172,9 +159,69 @@ function eliminarDelCarrito(id) {
     actualizarContador();
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    mostrarProductos();   // index.html
-    mostrarDetalle();     // detalle.html
-    mostrarCarrito();     // carrito.html
-    actualizarContador(); // contador en todas
+$(function() {
+    mostrarProductos();
+    mostrarDetalle();
+    mostrarCarrito();
+    actualizarContador();
+
+    $('#product-grid').on('click', '.producto-clickable', function() {
+        const id = $(this).data('id');
+        window.location.href = `detalle.html?id=${id}`;
+    });
+
+    $('#cart-items').on('click', '.btn-restar', function() {
+        const id = $(this).data('id');
+        cambiarCantidad(id, -1);
+    });
+
+    $('#cart-items').on('click', '.btn-sumar', function() {
+        const id = $(this).data('id');
+        cambiarCantidad(id, 1);
+    });
+
+    $('#cart-items').on('click', '.btn-eliminar', function() {
+        const id = $(this).data('id');
+        eliminarDelCarrito(id);
+    });
+
+    
+    const $contactForm = $('#contactForm');
+    
+    // Usamos el mismo truco: si el formulario existe en esta página...
+    if ($contactForm.length > 0) {
+        // Seleccionamos los mensajes
+        const $loadingMsg = $('.mensaje.loading');
+        const $successMsg = $('.mensaje.success');
+        const $errorMsg = $('.mensaje.error');
+
+        // Manejamos el evento 'submit' con jQuery
+        $contactForm.on('submit', function(e) {
+            e.preventDefault(); // Evita que la página se recargue
+
+            // Ocultamos mensajes y mostramos 'cargando'
+            $successMsg.hide();
+            $errorMsg.hide();
+            $loadingMsg.show(); // .show() es el .css('display', 'block') de jQuery
+
+            // Simulación de envío
+            setTimeout(() => {
+                $loadingMsg.hide();     // .hide() es el .css('display', 'none')
+                $successMsg.show();
+
+                // .reset() es una función nativa de formulario
+                // $(this)[0] se refiere al elemento DOM del formulario
+                $(this)[0].reset(); 
+
+                // Ocultar el mensaje de éxito después de 5 seg
+                setTimeout(() => {
+                    $successMsg.hide();
+                }, 5000);
+            }, 1500);
+        });
+    }
+
+
+
+
 });

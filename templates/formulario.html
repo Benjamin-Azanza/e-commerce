@@ -89,33 +89,10 @@
     </div>
 </footer>
 
-<script>
-    const form = document.getElementById('contactForm');
-    const loadingMsg = document.querySelector('.loading');
-    const successMsg = document.querySelector('.success');
-    const errorMsg = document.querySelector('.error');
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" 
+integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        loadingMsg.style.display = 'block';
-        successMsg.style.display = 'none';
-        errorMsg.style.display = 'none';
-
-        // Simular envío del formulario
-        setTimeout(() => {
-            loadingMsg.style.display = 'none';
-            successMsg.style.display = 'block';
-
-            // Limpiar el formulario después del éxito
-            form.reset();
-
-            // Ocultar el mensaje de éxito después de 5 segundos
-            setTimeout(() => {
-                successMsg.style.display = 'none';
-            }, 5000);
-        }, 1500);
-    });
-</script>
+<script src="/static/productos.js"></script>
 
 </body>
 </html>
