@@ -1,5 +1,3 @@
-#Cap & Knit
-
 ## Características Principales
 
 * *Visualización de Productos*: Muestra una cuadrícula de productos desde un objeto estático de JavaScript.
