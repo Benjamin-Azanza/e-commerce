@@ -1,8 +1,8 @@
 const productos = [
-    { id: 1, nombre: "Gorra Algodón", precio: 19.99, imagen: "Gorra Celeste", descripcion: "Algodón peinado ultra-suave. Perfecta para un look minimalista." },
-    { id: 2, nombre: "Gorro Alpaca", precio: 29.99, imagen: "Gorro Lana Gris", descripcion: "Lana 100% natural de alpaca. Suave y cálido." },
-    { id: 3, nombre: "Gorra Negra", precio: 22.50, imagen: "Gorra Negra Minimal", descripcion: "Diseño minimalista en algodón negro." },
-    { id: 4, nombre: "Gorro Beige", precio: 25.00, imagen: "Gorro Beige Suave", descripcion: "Suave gorro beige para los días fríos." }
+    { id: 1, nombre: "Gorra Beige", precio: 19.99, imagen: "/static/img/gorrabeige.jpg", descripcion: "Gorra beige clásica y sencilla. Tejido transpirable. Comodidad para el día a día." },
+    { id: 2, nombre: "Gorra Morada", precio: 29.99, imagen: "/static/img/gorramorada.jpg", descripcion: "Gorra color lavanda. Ajustable y suave. Un toque de color vintage." },
+    { id: 3, nombre: "Gorra Celeste", precio: 22.50, imagen: "/static/img/gorranegramin.jpg", descripcion: "Gorra de visera plana azul cielo. Diseño con bordado de nubes y estilo urbano." },
+    { id: 4, nombre: "Gorra Negra", precio: 25.00, imagen: "/static/img/gorranewera.jpg", descripcion: "Gorra Negra New Era 59Fifty. Logo 'NY' blanco. El clásico deportivo y urbano." }
 ];
 
 function obtenerCarrito() {
@@ -31,9 +31,9 @@ function mostrarProductos() {
         const $div = $('<div></div>')
             .addClass('col-10 col-md-4 col-lg-3')
             .html(`
-                <div class="card h-100 shadow-sm" style="cursor:pointer;">
-                    <div class="card-body text-center producto-clickable" data-id="${p.id}">
-                        <div class="bg-secondary-subtle py-5 mb-3 rounded">${p.imagen}</div>
+                <div class="card h-100 shadow-sm producto-clickable" data-id="${p.id}" style="cursor:pointer;">
+                    <img src="${p.imagen}" class="card-img-top" alt="${p.nombre}" style="height: 200px; object-fit: cover;">
+                    <div class="card-body text-center">
                         <h5 class="fw-normal">${p.nombre}</h5>
                         <p class="text-muted mb-0">$${p.precio.toFixed(2)}</p>
                     </div>
@@ -49,6 +49,7 @@ function mostrarDetalle() {
     const params = new URLSearchParams(window.location.search);
     const id = parseInt(params.get('id')) || 1;
     const producto = productos.find(p => p.id === id);
+
     const $contenedor = $('#detalle-producto');
     if ($contenedor.length === 0) return;
 
@@ -59,9 +60,7 @@ function mostrarDetalle() {
 
     $contenedor.html(`
         <div class="col-12 col-md-6">
-            <div class="d-flex justify-content-center align-items-center bg-light" style="height:400px;">
-                <span class="text-muted">${producto.imagen}</span>
-            </div>
+            <img src="${producto.imagen}" alt="${producto.nombre}" class="img-fluid rounded" style="max-height: 400px; width: 100%; object-fit: cover;">
         </div>
         <div class="col-12 col-md-6">
             <h1>${producto.nombre}</h1>
@@ -83,8 +82,10 @@ function mostrarDetalle() {
         }
         let cart = obtenerCarrito();
         const i = cart.findIndex(item => item.id === producto.id);
+
         if (i >= 0) cart[i].cantidad += cantidad;
         else cart.push({ ...producto, cantidad });
+
         guardarCarrito(cart);
         actualizarContador();
         alert(`Añadido al carrito: ${producto.nombre} (x${cantidad})`);
@@ -101,7 +102,7 @@ function mostrarCarrito() {
     if ($contenedor.length === 0) return;
 
     if (carrito.length === 0) {
-        $contenedor.html("<p class='text-center mt-4 text-muted'>Tu cesta está vacía 🛒</p>");
+        $contenedor.html("<p class='text-center mt-4 text-muted'>Tu carrito esta vacío </p>");
         $totalElem.text("$0.00");
         $btnCheckout.prop('disabled', true);
         return;
@@ -186,7 +187,8 @@ $(function() {
     });
 
     
-    // Listener para el formulario de contacto
+
+    
     const $contactForm = $('#contactForm');
     if ($contactForm.length > 0) {
         const $loadingMsg = $('.mensaje.loading');
@@ -196,38 +198,30 @@ $(function() {
         $contactForm.on('submit', function(e) {
             e.preventDefault(); 
             
-            // 1. Ocultar todos los mensajes al inicio
             $loadingMsg.hide();
             $successMsg.hide();
             $errorMsg.hide();
 
-            // 2. Obtener valores y quitar espacios en blanco
             const nombre = $('#nombre').val().trim();
             const email = $('#email').val().trim();
             const asunto = $('#asunto').val().trim();
             const mensaje = $('#mensaje').val().trim();
 
-            // 3. VALIDACIÓN DE ERROR DEL CLIENTE (Campos vacíos)
             if (nombre === '' || email === '' || asunto === '' || mensaje === '') {
-                // Si CUALQUIER campo está vacío, mostramos error
-                $errorMsg.text('Error: Por favor, complete todos los campos.'); // Mensaje específico
+                $errorMsg.text('Error: Por favor, complete todos los campos.'); 
                 $errorMsg.show();
-                return; // Detenemos la función aquí
+                return; 
             }
 
-            // 4. SI LA VALIDACIÓN PASA, MOSTRAMOS "CARGANDO"
             $loadingMsg.show(); 
 
-            // 5. SIMULACIÓN DE ENVÍO (Error del Servidor)
             setTimeout(() => {
                 $loadingMsg.hide();
                 
-                // Usamos la simulación de error de servidor que ya teníamos
                 if (asunto.toLowerCase() === 'error') {
-                    $errorMsg.text('Error: No se pudo enviar el mensaje. Intenta nuevamente.'); // Mensaje de servidor
+                    $errorMsg.text('Error: No se pudo enviar el mensaje. Intenta nuevamente.'); 
                     $errorMsg.show();
                 } else {
-                    // ÉXITO TOTAL
                     $successMsg.show();
                     $(this)[0].reset(); 
 
@@ -235,11 +229,52 @@ $(function() {
                         $successMsg.hide();
                     }, 5000);
                 }
-            }, 2000);
+            }, 1500);
         });
     }
 
+    const $loginForm = $('#loginForm');
+    if ($loginForm.length > 0) {
+        
+        const $loadingMsg = $('.mensaje.loading');
+        const $successMsg = $('.mensaje.success');
+        const $errorMsg = $('.mensaje.error');
 
+        $loginForm.on('submit', function(e) {
+            e.preventDefault(); 
 
+            $loadingMsg.hide();
+            $successMsg.hide();
+            $errorMsg.hide();
 
+            const email = $('#email').val().trim();
+            const password = $('#password').val().trim();
+
+            if (email === '' || password === '') {
+                $errorMsg.text('Error: Por favor, ingrese correo y contraseña.');
+                $errorMsg.show();
+                return; 
+            }
+
+            $loadingMsg.show();
+
+            setTimeout(() => {
+                $loadingMsg.hide();
+
+                if (email === 'admin@capknit.com' && password === '1234') {
+                    $successMsg.text('¡Bienvenido! Redirigiendo a la tienda...');
+                    $successMsg.show();
+                    
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 2000);
+
+                } else {
+                    $errorMsg.text('Error: Correo o contraseña incorrectos.');
+                    $errorMsg.show();
+                }
+
+            }, 1500);
+        });
+    }
 });
